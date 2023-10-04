@@ -1,0 +1,174 @@
+{{#withSeparateModelsAndApi}}
+import instance, { type ResSelector } from '{{apiRelativeToRoot}}instance';
+import {type AxiosRequestConfig} from 'axios'
+{{#imports}}
+import { {{classname}} } from '{{apiRelativeToRoot}}{{tsModelPackage}}';
+{{/imports}}
+
+{{/withSeparateModelsAndApi}}
+
+{{^withSeparateModelsAndApi}}
+
+
+{{/withSeparateModelsAndApi}}
+
+
+{{#withClass}}
+export class {{classname}}{
+    {{#operations}}
+    {{#operation}}
+    static {{nickname}}({{#allParams.0}}params:{{classname}}{{operationIdCamelCase}}Request,{{/allParams.0}}options:AxiosRequestConfig={}):Promise<ResSelector<{{{returnType}}}{{^returnType}}void{{/returnType}}>> {
+        const submitData:Record<string,any> = {}
+        {{#hasBodyParam}}
+        submitData.data = params
+        {{/hasBodyParam}}
+        {{^hasBodyParam}}
+        {{#hasQueryParams}}
+        submitData.params = params
+        {{/hasQueryParams}}
+        {{#hasHeaderParams}}
+        submitData.headers = {
+            {{#headerParams}}
+            '{{baseName}}':params.{{paramName}}
+            {{/headerParams}}
+        }
+        {{/hasHeaderParams}}
+        {{#hasFormParams}}
+        const formData = new FormData()
+        {{#formParams}}
+        formData.append('{{baseName}}',params.{{paramName}} as any)
+        {{/formParams}}  
+        submitData.data=formData
+        {{/hasFormParams}}
+        {{/hasBodyParam}}
+        return instance.request({
+            method:'{{httpMethod}}',
+            url:{{^hasPathParams}}'{{{path}}}',{{/hasPathParams}}{{#hasPathParams}}`{{{path}}}`{{#pathParams}}
+                    .replace(`{${"{{baseName}}"}}`, encodeURIComponent(String(params.{{paramName}}))){{/pathParams}},{{/hasPathParams}}   
+            ...submitData,
+            ...options,
+        })
+    }
+    {{/operation}}
+    {{/operations}}
+}
+
+{{/withClass}}
+
+{{^withClass}}
+{{#operations}}
+{{#operation}}
+/**{{#notes}}
+* {{&notes}}{{/notes}}
+{{#summary}}
+* @summary {{&summary}}{{/summary}}
+{{#allParams.0}}
+* @param {{=<% %>=}}{<%& classname %><%& operationIdCamelCase %>Request}<%={{ }}=%> params Request parameters.{{/allParams.0}}{{#isDeprecated}}
+* @deprecated{{/isDeprecated}}
+*/
+export function {{#lambda.camelcase }}{{classname}}{{/lambda.camelcase }}{{operationIdCamelCase}}({{#allParams.0}}params:{{classname}}{{operationIdCamelCase}}Request,{{/allParams.0}}options:AxiosRequestConfig={}):Promise<ResSelector<{{{returnType}}}{{^returnType}}void{{/returnType}}>> {
+    const submitData:Record<string,any> = {}
+    {{#hasBodyParam}}
+    submitData.data = params
+    {{/hasBodyParam}}
+    {{^hasBodyParam}}
+    {{#hasQueryParams}}
+    submitData.params = params
+    {{/hasQueryParams}}
+    {{#hasHeaderParams}}
+    submitData.headers = {
+        {{#headerParams}}
+        '{{baseName}}':params.{{paramName}}
+        {{/headerParams}}
+    }
+    {{/hasHeaderParams}}
+    {{#hasFormParams}}
+    const formData = new FormData()
+    {{#formParams}}
+    formData.append('{{baseName}}',params.{{paramName}} as any)
+    {{/formParams}}  
+    submitData.data=formData
+    {{/hasFormParams}}
+    {{/hasBodyParam}}
+     return instance.request({
+        method:'{{httpMethod}}',
+        url:{{^hasPathParams}}'{{{path}}}',{{/hasPathParams}}{{#hasPathParams}}`{{{path}}}`{{#pathParams}}
+                .replace(`{${"{{baseName}}"}}`, encodeURIComponent(String(params.{{paramName}}))){{/pathParams}},{{/hasPathParams}}   
+        ...submitData,
+        ...options,
+     })
+}
+{{/operation}}
+{{/operations}}
+{{/withClass}}
+
+{{#operations}}
+{{#operation}}
+{{#bodyParam}}
+
+/**
+ * Request parameters for {{nickname}} operation in {{classname}}.
+ * @export
+ */
+export interface {{classname}}{{operationIdCamelCase}}Request extends {{{dataType}}}{
+    {{#allParams}}{{^isBodyParam}}{{this}}{{#description}}/**{{description}}*/{{/description}}
+    readonly {{paramName}}{{^required}}?{{/required}}:{{{dataType}}}{{#isNullable}} | null{{/isNullable}};{{^-last}}{{/-last}}{{/isBodyParam}}{{/allParams}}
+}
+{{/bodyParam}}
+
+{{^bodyParam}}
+{{#allParams.0}}
+/**
+ * Request parameters for {{nickname}} operation in {{classname}}.
+ * @export
+ */
+export interface {{classname}}{{operationIdCamelCase}}Request {
+    {{#allParams}}
+    {{#description}}/**{{description}}*/{{/description}}
+    readonly {{paramName}}{{^required}}?{{/required}}: {{{dataType}}}{{#isNullable}} | null{{/isNullable}};{{^-last}}{{/-last}}
+    {{/allParams}}
+}
+{{/allParams.0}}
+{{/bodyParam}}
+{{/operation}}
+{{/operations}}
+
+{{#operations}}
+{{#operation}}
+{{#allParams}}
+{{#isEnum}}
+{{#stringEnums}}
+/**
+  * @export
+  * @enum {string}
+  */
+export const enum {{operationIdCamelCase}}{{enumName}} {
+{{#allowableValues}}
+    {{#enumVars}}
+    {{{name}}} = {{{value}}}{{^-last}},{{/-last}}
+    {{/enumVars}}
+{{/allowableValues}}
+}
+{{/stringEnums}}
+{{^stringEnums}}
+/**
+ * @export
+ */
+export const {{operationIdCamelCase}}{{enumName}} = {
+{{#allowableValues}}
+    {{#enumVars}}
+    {{{name}}}: {{{value}}}{{^-last}},{{/-last}}
+    {{/enumVars}}
+{{/allowableValues}}
+} as const;
+export type {{operationIdCamelCase}}{{enumName}} = typeof {{operationIdCamelCase}}{{enumName}}[keyof typeof {{operationIdCamelCase}}{{enumName}}];
+{{/stringEnums}}
+{{/isEnum}}
+{{/allParams}}
+{{/operation}}
+{{/operations}}
+
+
+
+
+

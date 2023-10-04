@@ -1,0 +1,24 @@
+{
+  "name": "generate",
+  "version": "1.0.0",
+  "description": "",
+  "main": "demo/index.ts",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@openapitools/openapi-generator-cli":"^2.7.0",
+    "bch-axios":"workspace:*",
+    "fs-extra":"^11.1.1",
+    "diff":"^5.1.0",
+    "@types/fs-extra":"^11.0.2",
+    "micromatch":"^4.0.5",
+    "@types/micromatch":"^4.0.3",
+    "fast-glob":"^3.3.1",
+    "@types/diff":"^5.0.5"
+  },
+  "scripts": {
+    "start": "esno src/index.ts",
+    "build": "openapi-generator-cli generate -g typescript-axios -i 5.json -o demo --template-dir template  --enable-post-process-file --additional-properties=withInterfaces=true,apiPackage=apis,modelPackage=models,withSeparateModelsAndApi=true,useSingleRequestParameter=true"
+  }
+}
