@@ -1,0 +1,11 @@
+{
+  "$schema": "node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+  "spaces": 2,
+  "generator-cli": {
+      "version": "7.0.0",
+      "repository": {
+        "queryUrl": "http://maven.aliyun.com/nexus/content/repositories/central/solrsearch/select?q=g:${group.id}+AND+a:${artifact.id}&core=gav&start=0&rows=200",
+        "downloadUrl": "http://maven.aliyun.com/nexus/content/repositories/central/${groupId}/${artifactId}/${versionName}/${artifactId}-${versionName}.jar"
+      }
+  }
+}

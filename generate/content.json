@@ -1,0 +1,6 @@
+{
+    "mediaTypes":{
+        "application/octet-stream":"applicationOctetStream",
+        "application/json":"applicationJson"
+    }
+}
