@@ -65,7 +65,10 @@ async function runTask(cmdobj:CmdObj) {
   });
 }
 function getCliCmd(input:string,withClass:boolean) {
-  const cliCmd = `${cliDir} generate -g typescript-axios -i ${input} -o ${outputTmpDir} --template-dir ${templateDir} --additional-properties=apiPackage=apis,modelPackage=models,withSeparateModelsAndApi=true,stringEnums=true,withClass=${withClass}`;
+  let cliCmd = `${cliDir} generate -g typescript-axios -i ${input} -o ${outputTmpDir} --template-dir ${templateDir} --additional-properties=apiPackage=apis,modelPackage=models,withSeparateModelsAndApi=true,stringEnums=true`;
+  if(withClass){
+    cliCmd += `,withClass=${withClass}`
+  }
   return cliCmd
 }
 
