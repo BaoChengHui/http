@@ -1,3 +1,4 @@
+
 import path from "path";
 import { exec } from "child_process";
 import {
@@ -13,80 +14,74 @@ import {
 import micromatch from "micromatch";
 import fg from "fast-glob";
 import {  diffTrimmedLines } from "diff";
+import {program}   from "commander";
+import {consola} from "consola"
+import { getDateInfo } from "./date";
+import { cliDir, outputTmpDir, templateDir } from "./pathInfos";
+import { excludes, savedFiles } from "./config";
 
-const rootDir = process.cwd();
-const tmpDir = path.resolve(rootDir, "node_modules", "@bch/generate");
-const outputTmpDir = path.resolve(tmpDir, "service");
-const cliDir = path.resolve(
-  rootDir,
-  "node_modules/.bin",
-  "openapi-generator-cli"
-);
-const inputDir = path.resolve(rootDir, "5.json");
-const outputDir = path.resolve(rootDir, "service");
-const templateDir = path.resolve(rootDir, "template");
+interface CmdObj {
+  input?:string
+  output?:string
+}
 
-const cliCmd = `${cliDir} generate -g typescript-axios -i ${inputDir} -o ${outputTmpDir} --template-dir ${templateDir} --skip-validate-spec --enable-post-process-file --additional-properties=apiPackage=apis,modelPackage=models,withSeparateModelsAndApi=true,stringEnums=true`;
+program
+  .command('generate')
+  .option('-i, --input <input>', 'Specify the input')
+  .option('-o, --output <output>', 'Specify the output')
+  .action((cmdobj:CmdObj)=>{
+    runTask(cmdobj)
+  })
+program
+.parse(process.argv);
 
-function run() {
+async function runTask(cmdobj:CmdObj) {
+  const {input,output} = cmdobj
+  if(!input){
+    consola.error('input is empty')
+    return
+  }
+  if(!output){
+    consola.error('output is empty')
+    return
+  }
+  const cliCmd = getCliCmd(input,output)
   exec(cliCmd, (error, stdout, stderr) => {
-    console.log("error", error);
-    console.log("stderr", stderr);
     if (error) {
+      console.log(error);
       return;
     }
     if (stderr) {
+      console.log(stderr);
       return;
     }
     console.log(stdout);
-    callSuccess();
+    generateCodes(output)
   });
 }
-
-const excludes = [
-  "**/.openapi-generator",
-  "**/.openapi-generator-ignore",
-  "**/.gitignore",
-  "**/.npmignore",
-  "**/base.ts",
-  "**/common.ts",
-  "**/configuration.ts",
-  "**/git_push.sh",
-];
-
-const savedFiles = ["CHANGELOG.md", "instance.ts"];
-
-async function copyBaseFiles() {
-  savedFiles.forEach((item) => {
-    if (existsSync(path.resolve(outputDir, item))) {
-      copyFileSync(
-        path.resolve(outputDir, item),
-        path.resolve(outputTmpDir, item)
-      );
-    }
-  });
+function getCliCmd(input:string,output:string) {
+  const cliCmd = `${cliDir} generate -g typescript-axios -i ${input} -o ${outputTmpDir} --template-dir ${templateDir} --additional-properties=apiPackage=apis,modelPackage=models,withSeparateModelsAndApi=true,stringEnums=true,withClass=true`;
+  return cliCmd
 }
 
-async function callSuccess() {
-  copyBaseFiles();
-  const inputs = await fg("**/*", { cwd: outputTmpDir, ignore: excludes });
+async function generateCodes(output:string) {
+  copyBaseFiles(output)
+    const inputs = await fg("**/*", { cwd: outputTmpDir, ignore: excludes });
 
   let changeContent = "";
   inputs.forEach((item) => {
-    
     if (
       pathExistsSync(path.resolve(outputTmpDir, item)) &&
-      pathExistsSync(path.resolve(outputDir, item))
+      pathExistsSync(path.resolve(output, item))
     ) {
       const afterContent = readFileSync(
         path.resolve(outputTmpDir, item),
         "utf-8"
       );
-      const curContent = readFileSync(path.resolve(outputDir, item), "utf-8");
+      const curContent = readFileSync(path.resolve(output, item), "utf-8");
       const differences = diffTrimmedLines(curContent, afterContent);
       let content = "";
       differences.forEach((part) => {
-        //  const value = part.value.replace(/\n/g,'\\n')
         const added = part.added ? `<span style='color:red'>++</span>` : "";
         const removed = part.removed
           ? `<span style='color:green'>--</span>`
@@ -101,14 +96,14 @@ async function callSuccess() {
       }
     }
   });
-  removeSync(outputDir);
-  copySync(outputTmpDir, outputDir, {
+  removeSync(output);
+  copySync(outputTmpDir, output, {
     filter: (src, dest) => {
       return !micromatch.isMatch(src, excludes, { dot: true });
     },
   });
   if (changeContent) {
-    const logPath = path.resolve(outputDir, "CHANGELOG.md");
+    const logPath = path.resolve(output, "CHANGELOG.md");
     ensureFileSync(logPath);
     const changeLogContent = readFileSync(logPath);
     writeFileSync(
@@ -124,15 +119,18 @@ async function callSuccess() {
   removeSync(outputTmpDir);
 }
 
-run();
-
-function getDateInfo() {
-  const date = new Date();
-  const y = date.getFullYear();
-  const m = (date.getMonth() + 1).toString().padStart(2, "0");
-  const d = date.getDate().toString().padStart(2, "0");
-  const h = date.getHours().toString().padStart(2, "0");
-  const minutes = date.getMinutes().toString().padStart(2, "0");
-  const s = date.getSeconds().toString().padStart(2, "0");
-  return `${y}-${m}-${d}:${h}:${minutes}:${s}`;
+function copyBaseFiles(output:string) {
+  savedFiles.forEach((item) => {
+    if (existsSync(path.resolve(output, item))) {
+      copyFileSync(
+        path.resolve(output, item),
+        path.resolve(outputTmpDir, item)
+      );
+    }
+  });
 }
+
+
+
+
+
