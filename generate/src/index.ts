@@ -1,4 +1,3 @@
-
 import path from "path";
 import { exec } from "child_process";
 import {
@@ -13,44 +12,44 @@ import {
 } from "fs-extra";
 import micromatch from "micromatch";
 import fg from "fast-glob";
-import {  diffTrimmedLines } from "diff";
-import {program}   from "commander";
-import {consola} from "consola"
+import { diffTrimmedLines } from "diff";
+import { program } from "commander";
+import { consola } from "consola";
 import { getDateInfo } from "./date";
 import { cliDir, outputTmpDir, templateDir } from "./pathInfos";
 import { excludes, savedFiles } from "./config";
+import { transformDoc } from "./transform";
 
 interface CmdObj {
-  input?:string
-  output?:string
+  input?: string;
+  output?: string;
   /**@default false */
-  withClass?:boolean
+  withClass?: boolean;
 }
 
 program
-  .command('generate')
-  .option('-i, --input <input>', 'Specify the input')
-  .option('-o, --output <output>', 'Specify the output')
-  .option('-withClass, -- withClass','is withClass')
-  .action((cmdobj:CmdObj)=>{
-    runTask(cmdobj)
-  })
-program
-.parse(process.argv);
+  .command("generate")
+  .option("-i, --input <input>", "Specify the input")
+  .option("-o, --output <output>", "Specify the output")
+  .option("-withClass, -- withClass", "is withClass")
+  .action((cmdobj: CmdObj) => {
+    runTask(cmdobj);
+  });
+program.parse(process.argv);
 
-async function runTask(cmdobj:CmdObj) {
-  console.log("cmdobj",cmdobj);
-  
-  const {input,output,withClass = false} = cmdobj
-  if(!input){
-    consola.error('input is empty')
-    return
+async function runTask(cmdobj: CmdObj) {
+  console.log("cmdobj", cmdobj);
+
+  const { input, output, withClass = false } = cmdobj;
+  if (!input) {
+    consola.error("input is empty");
+    return;
   }
-  if(!output){
-    consola.error('output is empty')
-    return
+  if (!output) {
+    consola.error("output is empty");
+    return;
   }
-  const cliCmd = getCliCmd(input,withClass)
+  const cliCmd = getCliCmd(input, withClass);
   exec(cliCmd, (error, stdout, stderr) => {
     if (error) {
       console.log(error);
@@ -61,20 +60,20 @@ async function runTask(cmdobj:CmdObj) {
       return;
     }
     console.log(stdout);
-    generateCodes(output)
+    generateCodes(output);
   });
 }
-function getCliCmd(input:string,withClass:boolean) {
+function getCliCmd(input: string, withClass: boolean) {
   let cliCmd = `${cliDir} generate -g typescript-axios -i ${input} -o ${outputTmpDir} --template-dir ${templateDir} --additional-properties=apiPackage=apis,modelPackage=models,withSeparateModelsAndApi=true,stringEnums=true`;
-  if(withClass){
-    cliCmd += `,withClass=${withClass}`
+  if (withClass) {
+    cliCmd += `,withClass=${withClass}`;
   }
-  return cliCmd
+  return cliCmd;
 }
 
-async function generateCodes(output:string) {
-  copyBaseFiles(output)
-    const inputs = await fg("**/*", { cwd: outputTmpDir, ignore: excludes });
+async function generateCodes(output: string) {
+  copyBaseFiles(output);
+  const inputs = await fg("**/*", { cwd: outputTmpDir, ignore: excludes });
 
   let changeContent = "";
   inputs.forEach((item) => {
@@ -127,7 +126,7 @@ async function generateCodes(output:string) {
   removeSync(outputTmpDir);
 }
 
-function copyBaseFiles(output:string) {
+function copyBaseFiles(output: string) {
   savedFiles.forEach((item) => {
     if (existsSync(path.resolve(output, item))) {
       copyFileSync(
@@ -137,8 +136,3 @@ function copyBaseFiles(output:string) {
     }
   });
 }
-
-
-
-
-
