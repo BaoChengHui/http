@@ -23,12 +23,15 @@ import { excludes, savedFiles } from "./config";
 interface CmdObj {
   input?:string
   output?:string
+  /**@default false */
+  withClass?:boolean
 }
 
 program
   .command('generate')
   .option('-i, --input <input>', 'Specify the input')
   .option('-o, --output <output>', 'Specify the output')
+  .option('-withClass, -- withClass','is withClass')
   .action((cmdobj:CmdObj)=>{
     runTask(cmdobj)
   })
@@ -36,7 +39,9 @@ program
 .parse(process.argv);
 
 async function runTask(cmdobj:CmdObj) {
-  const {input,output} = cmdobj
+  console.log("cmdobj",cmdobj);
+  
+  const {input,output,withClass = false} = cmdobj
   if(!input){
     consola.error('input is empty')
     return
@@ -45,7 +50,7 @@ async function runTask(cmdobj:CmdObj) {
     consola.error('output is empty')
     return
   }
-  const cliCmd = getCliCmd(input,output)
+  const cliCmd = getCliCmd(input,withClass)
   exec(cliCmd, (error, stdout, stderr) => {
     if (error) {
       console.log(error);
@@ -59,8 +64,8 @@ async function runTask(cmdobj:CmdObj) {
     generateCodes(output)
   });
 }
-function getCliCmd(input:string,output:string) {
-  const cliCmd = `${cliDir} generate -g typescript-axios -i ${input} -o ${outputTmpDir} --template-dir ${templateDir} --additional-properties=apiPackage=apis,modelPackage=models,withSeparateModelsAndApi=true,stringEnums=true,withClass=true`;
+function getCliCmd(input:string,withClass:boolean) {
+  const cliCmd = `${cliDir} generate -g typescript-axios -i ${input} -o ${outputTmpDir} --template-dir ${templateDir} --additional-properties=apiPackage=apis,modelPackage=models,withSeparateModelsAndApi=true,stringEnums=true,withClass=${withClass}`;
   return cliCmd
 }
 

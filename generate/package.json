@@ -26,7 +26,7 @@
     "generate": "src/index.ts"
   },
   "scripts": {
-    "my-cli": "esno src/index.ts generate -i 5.json -o demo",
+    "my-cli": "esno src/index.ts generate -i 5.json -o demo ",
     "build": "openapi-generator-cli generate -g typescript-axios -i https://gateway-int-hwdev.zeekrlife-test.com/leasingcentermanage/ultracode/v2/api-docs?group=%E5%85%A8%E9%83%A8 -o demo --template-dir template  --enable-post-process-file --additional-properties=withInterfaces=true,apiPackage=apis,modelPackage=models,withSeparateModelsAndApi=true,useSingleRequestParameter=true"
   },
   "files": [
