@@ -26,6 +26,7 @@
     "tsup": "^7.2.0",
     "unplugin-auto-import": "^0.16.6",
     "esno": "^0.17.0",
-    "@types/file-saver":"^2.0.5"
+    "@types/file-saver":"^2.0.5",
+    "typescript":"^5.2.2"
   }
 }
