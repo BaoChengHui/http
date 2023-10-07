@@ -15,8 +15,8 @@
     "axios": "^1.5.1"
   },
   "scripts": {
-    "build": "tsup src/*.ts --format cjs,esm --dts --splitting --clean",
-    "dev": "tsup src/*.ts --format cjs,esm --dts --splitting --clean --watch"
+    "build": "tsup src/index.ts --format cjs,esm --dts  --clean",
+    "dev": "tsup src/index.ts --format cjs,esm --dts  --clean --watch"
   },
   "files": [
     "dist",
