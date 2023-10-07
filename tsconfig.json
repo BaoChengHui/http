@@ -16,8 +16,5 @@
     "removeComments": false,
     "rootDir": ".",
     "types": [],
-    "paths": {
-      "@element-plus/*": ["packages/*"]
-    }
   }
 }
