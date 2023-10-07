@@ -1,0 +1,40 @@
+{
+  "name": "@bch/openapi-axios-generator",
+  "version": "0.0.1",
+  "description": "根据swagger文档生成typescript-axios代码",
+  "keywords": ["swagger","openapi","codegen","axios"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^8.3.0",
+    "ora": "^5.4.0",
+    "@openapitools/openapi-generator-cli":"^2.7.0",
+    "fs-extra":"^11.1.1",
+    "diff":"^5.1.0",
+    "micromatch":"^4.0.5",
+    "fast-glob":"^3.3.1",
+    "consola":"^3.2.3",
+    "js-pinyin":"0.2.5",
+    "@apidevtools/swagger-parser":"^10.1.0",
+    "node-pinyin":"^0.2.3"
+  },
+  "devDependencies": {
+    "@types/fs-extra":"^11.0.2",
+    "@types/micromatch":"^4.0.3",
+    "@types/diff":"^5.0.5"
+  },
+  "bin": {
+    "openapi-axios-generator-cli": "src/dist/index.mjs"
+  },
+  "scripts": { 
+    "my-cli": "esno src/index.ts generate -i 5.json -o demo",
+    "tsss1": "openapi-generator-cli generate -g typescript-axios -i test.json  -o demo  --skip-validate-spec --enable-post-process-file --additional-properties=withInterfaces=true,apiPackage=apis,modelPackage=models,withSeparateModelsAndApi=true,useSingleRequestParameter=true,useSingleRequestParameter=true",
+    "build":"tsup src/index.ts --format esm   --clean"
+  },
+  "files": [
+    "template",
+    "openapitools.json",
+    "README.md",
+    "dist"
+  ]
+}
