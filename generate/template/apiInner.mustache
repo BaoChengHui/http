@@ -19,14 +19,9 @@ export class {{classname}}{
     {{#operation}}
     static {{nickname}}({{#allParams.0}}params:{{classname}}{{operationIdCamelCase}}Request,{{/allParams.0}}options:AxiosRequestConfig={}):Promise<ResSelector<{{{returnType}}}{{^returnType}}void{{/returnType}}>> {
         const submitData:Record<string,any> = {}
-        {{#bodyParam}}
-        {{#isPrimitiveType}}
-        submitData.params = params
-        {{/isPrimitiveType}}
-        {{^isPrimitiveType}}
+        {{#hasBodyParam}}
         submitData.data = params
-        {{/isPrimitiveType}}
-        {{/bodyParam}}
+        {{/hasBodyParam}}
         {{^hasBodyParam}}
         {{#hasQueryParams}}
         submitData.params = params
@@ -73,14 +68,9 @@ export class {{classname}}{
 */
 export function {{#lambda.camelcase }}{{classname}}{{/lambda.camelcase }}{{operationIdCamelCase}}({{#allParams.0}}params:{{classname}}{{operationIdCamelCase}}Request,{{/allParams.0}}options:AxiosRequestConfig={}):Promise<ResSelector<{{{returnType}}}{{^returnType}}void{{/returnType}}>> {
     const submitData:Record<string,any> = {}
-    {{#bodyParam}}
-    {{#isPrimitiveType}}
-    submitData.params = params
-    {{/isPrimitiveType}}
-    {{^isPrimitiveType}}
+    {{#hasBodyParam}}
     submitData.data = params
-    {{/isPrimitiveType}}
-    {{/bodyParam}}
+    {{/hasBodyParam}}
     {{^hasBodyParam}}
     {{#hasQueryParams}}
     submitData.params = params
@@ -115,50 +105,19 @@ export function {{#lambda.camelcase }}{{classname}}{{/lambda.camelcase }}{{opera
 {{#operations}}
 {{#operation}}
 {{#bodyParam}}
-
-{{#isModel}}
 /**
  * Request parameters for {{nickname}} operation in {{classname}}.
- * @export
  */
-export interface {{classname}}{{operationIdCamelCase}}Request extends {{{dataType}}}{
-    {{#allParams}}{{^isBodyParam}}{{this}}{{#description}}/**{{description}}*/{{/description}}
+export type {{classname}}{{operationIdCamelCase}}Request = {{{dataType}}}{{#allParams.1}}&{
+    {{#allParams}}{{^isBodyParam}}{{#description}}/**{{description}}*/{{/description}}
     {{paramName}}{{^required}}?{{/required}}:{{{dataType}}}{{#isNullable}} | null{{/isNullable}};{{^-last}}{{/-last}}{{/isBodyParam}}{{/allParams}}
 }
-{{/isModel}}
-{{#isPrimitiveType}}
-{{#allParams.0}}
-/**
- * Request parameters for {{nickname}} operation in {{classname}}.
- * @export
- */
-export interface {{classname}}{{operationIdCamelCase}}Request {
-    {{#allParams}}
-    {{#description}}/**{{description}}*/{{/description}}
-    {{paramName}}{{^required}}?{{/required}}: {{{dataType}}}{{#isNullable}} | null{{/isNullable}};{{^-last}}{{/-last}}
-    {{/allParams}}
-}
-{{/allParams.0}}
-{{/isPrimitiveType}}
-{{^isPrimitiveType}}
-{{^isModel}}
-/**
- * Request parameters for {{nickname}} operation in {{classname}}.
- * @export
- */
-export type {{classname}}{{operationIdCamelCase}}Request = {{{dataType}}} & {
-    {{#allParams}}{{^isBodyParam}}{{this}}{{#description}}/**{{description}}*/{{/description}}
-    {{paramName}}{{^required}}?{{/required}}:{{{dataType}}}{{#isNullable}} | null{{/isNullable}};{{^-last}}{{/-last}}{{/isBodyParam}}{{/allParams}}
-}
-{{/isModel}}
-{{/isPrimitiveType}}
+{{/allParams.1}}
 {{/bodyParam}}
-
 {{^bodyParam}}
 {{#allParams.0}}
 /**
  * Request parameters for {{nickname}} operation in {{classname}}.
- * @export
  */
 export interface {{classname}}{{operationIdCamelCase}}Request {
     {{#allParams}}

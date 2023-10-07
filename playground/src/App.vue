@@ -2,35 +2,46 @@
 import axios from "bch-axios";
 const instance=  axios.create({
   message:(msg)=>{
-    console.log(msg);
-  }
+    console.log("err",msg);
+  },
+  apiResponseAdapter(data) {
+      return {
+        code:1,
+        data,
+        success:false
+      }
+  },
+  apiErrorHandler(data, res) {
+      if(data){
+        window.alert("11111")
+      }
+
+  },
+})
+const instance2 =  axios.create({
+  message:(msg)=>{
+    console.log("err1111",msg);
+  },
+ 
 })
 
-instance.download({
+instance.request({
   method:'get',
-  url:"http://localhost:3000/files",
-  filename:"333.json"
+  url:"https://mock.apifox.cn/m1/3367071-0-default/pet/6",
+}).then((res)=>{
+  console.log("success",res);
+}) .catch(err=>{
+  console.log("err",err);
+})
+
+instance2.request({
+  method:'get',
+  url:"https://mock.apifox.cn/m1/3367071-0-default/pet/6",
 }).then(()=>{
   console.log("success");
 }) .catch(err=>{
   console.log("err",err);
-  
 })
-
-
-
-// instance.get("http://rap2api.taobao.org/app/mock/262868/test11111").then(res=>{
-//   console.log("111",res);
-  
-// })
-
-// instance
-// .interceptors.response.use((res)=>{
-//    console.log("res",res.config);
-//     return res
-// })
-
-
 
 </script>
 

@@ -29,8 +29,8 @@
     "generate": "src/index.ts"
   },
   "scripts": {
-    "my-cli": "esno src/index.ts generate -i https://gateway-int-hwdev.zeekrlife-test.com/leasingcentermanage/ultracode/v2/api-docs?group=%E5%85%A8%E9%83%A8 -o demo ",
-    "build": "openapi-generator-cli generate -g typescript-axios -i test.json  -o demo --template-dir template  --skip-validate-spec --enable-post-process-file --additional-properties=withInterfaces=true,apiPackage=apis,modelPackage=models,withSeparateModelsAndApi=true,useSingleRequestParameter=true"
+    "my-cli": "esno src/index.ts generate -i 5.json -o demo",
+    "build": "openapi-generator-cli generate -g typescript-axios -i test.json  -o demo  --skip-validate-spec --enable-post-process-file --additional-properties=withInterfaces=true,apiPackage=apis,modelPackage=models,withSeparateModelsAndApi=true,useSingleRequestParameter=true,useSingleRequestParameter=true"
   },
   "files": [
     "template"
