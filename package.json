@@ -1,22 +1,27 @@
 {
   "name": "@bch/axios",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "axios二次封装",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
-  "keywords": ["axios","http"],
+  "keywords": [
+    "axios",
+    "http"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "file-saver":"^2.0.5"
+    "file-saver": "^2.0.5"
   },
   "peerDependencies": {
     "axios": "^1.5.1"
   },
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts  --clean",
-    "dev": "tsup src/index.ts --format cjs,esm --dts  --clean --watch"
+    "dev": "tsup src/index.ts --format cjs,esm --dts  --clean --watch",
+    "prepublishOnly": "nr build",
+    "release": "bumpp && pnpm publish"
   },
   "files": [
     "dist",
@@ -25,7 +30,8 @@
   "devDependencies": {
     "tsup": "^7.2.0",
     "esno": "^0.17.0",
-    "@types/file-saver":"^2.0.5",
-    "typescript":"^5.2.2"
+    "@types/file-saver": "^2.0.5",
+    "typescript": "^5.2.2",
+    "bumpp": "^9.2.0"
   }
 }
