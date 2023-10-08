@@ -81,12 +81,13 @@ export function createInstance(config: CreateAxiosDefaults = {}) {
       if (apiResponseAdapter) {
         resData = apiResponseAdapter(resData);
       }
-      if (apiErrorHandler) {
-       apiErrorHandler(resData, res);
-      }
+      
 
       const { data, msg, success } = resData as ApiResponse;
       if (!success) {
+        if (apiErrorHandler) {
+          apiErrorHandler(resData, res);
+         }
         callErr(msg ?? "服务器错误，请稍候重试！");
         return Promise.reject(res.data);
       }
