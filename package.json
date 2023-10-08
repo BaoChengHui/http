@@ -1,5 +1,5 @@
 {
-  "name": "@bch/axios",
+  "name": "@baochh/http",
   "version": "0.1.2",
   "description": "axios二次封装",
   "main": "dist/index.js",
@@ -9,18 +9,21 @@
     "axios",
     "http"
   ],
-  "author": "",
-  "license": "ISC",
+  "author": "baochh",
+  "license": "MIT",
   "dependencies": {
     "file-saver": "^2.0.5"
   },
   "peerDependencies": {
     "axios": "^1.5.1"
   },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts  --clean",
     "dev": "tsup src/index.ts --format cjs,esm --dts  --clean --watch",
-    "prepublishOnly": "nr build",
+    "prepublishOnly": "npm run  build",
     "release": "bumpp && pnpm publish"
   },
   "files": [
