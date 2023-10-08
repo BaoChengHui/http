@@ -18,8 +18,7 @@ import { consola } from "consola";
 import { getDateInfo } from "./date";
 import { cliDir, outputTmpDir, templateDir } from "./pathInfos";
 import { excludes, savedFiles } from "./config";
-import { transformDoc } from "./transform";
-
+import ora from 'ora';
 interface CmdObj {
   input?: string;
   output?: string;
@@ -31,7 +30,7 @@ program
   .command("generate")
   .option("-i, --input <input>", "Specify the input")
   .option("-o, --output <output>", "Specify the output")
-  .option("-withClass, -- withClass", "is withClass")
+  .option("--withClass, --withClass", "is withClass")
   .action((cmdobj: CmdObj) => {
     runTask(cmdobj);
   });
@@ -47,6 +46,7 @@ async function runTask(cmdobj: CmdObj) {
     consola.error("output is empty");
     return;
   }
+  const spinner = ora('正在生成...\r').start();
   const cliCmd = getCliCmd(input, withClass);
   exec(cliCmd, (error, stdout, stderr) => {
     if (error) {
@@ -59,12 +59,13 @@ async function runTask(cmdobj: CmdObj) {
     }
     console.log(stdout);
     generateCodes(output);
+    spinner.stop()
   });
 }
 function getCliCmd(input: string, withClass: boolean) {
   let cliCmd = `${cliDir} generate -g typescript-axios -i ${input} -o ${outputTmpDir} --template-dir ${templateDir}  --additional-properties=apiPackage=apis,modelPackage=models,withSeparateModelsAndApi=true,stringEnums=true`;
   if (withClass) {
-    cliCmd += `,withClass=${withClass}`;
+    cliCmd += `,withClass=true`;
   }
   return cliCmd;
 }

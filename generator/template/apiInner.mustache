@@ -17,6 +17,14 @@ import { {{classname}} } from '{{apiRelativeToRoot}}{{tsModelPackage}}';
 export class {{classname}}{
     {{#operations}}
     {{#operation}}
+    /**{{#notes}}
+    * {{&notes}}{{/notes}}
+    {{#summary}}
+    * @summary {{&summary}}{{/summary}}
+    {{#allParams.0}}
+    * @param {{=<% %>=}}{<%& classname %><%& operationIdCamelCase %>Request}<%={{ }}=%> params Request parameters.{{/allParams.0}}{{#isDeprecated}}
+    * @deprecated{{/isDeprecated}}
+    */
     static {{nickname}}({{#allParams.0}}params:{{classname}}{{operationIdCamelCase}}Request,{{/allParams.0}}options:AxiosRequestConfig={}):Promise<ResSelector<{{{returnType}}}{{^returnType}}void{{/returnType}}>> {
         const submitData:Record<string,any> = {}
         {{#hasBodyParam}}
@@ -108,7 +116,7 @@ export function {{#lambda.camelcase }}{{classname}}{{/lambda.camelcase }}{{opera
 /**
  * Request parameters for {{nickname}} operation in {{classname}}.
  */
-export type {{classname}}{{operationIdCamelCase}}Request = {{{dataType}}}{{#allParams.1}}&{
+export type {{classname}}{{operationIdCamelCase}}Request = {{{dataType}}}{{#allParams.1}} & {
     {{#allParams}}{{^isBodyParam}}{{#description}}/**{{description}}*/{{/description}}
     {{paramName}}{{^required}}?{{/required}}:{{{dataType}}}{{#isNullable}} | null{{/isNullable}};{{^-last}}{{/-last}}{{/isBodyParam}}{{/allParams}}
 }
@@ -116,6 +124,7 @@ export type {{classname}}{{operationIdCamelCase}}Request = {{{dataType}}}{{#allP
 {{/bodyParam}}
 {{^bodyParam}}
 {{#allParams.0}}
+
 /**
  * Request parameters for {{nickname}} operation in {{classname}}.
  */
