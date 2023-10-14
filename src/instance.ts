@@ -7,7 +7,7 @@ import {
 import axios from "axios";
 import { defaultConfig } from "./config";
 import saveAs from "file-saver";
-import { errMessageMap } from "./message";
+import { defaultMessageMap } from "./message";
 
 export interface CustomConfig {
   message?: (msg: string) => void;
@@ -82,14 +82,13 @@ export function createInstance(config: CreateAxiosDefaults = {}) {
       if (apiResponseAdapter) {
         resData = apiResponseAdapter(resData);
       }
-      
 
       const { data, msg, success } = resData as ApiResponse;
       if (!success) {
         if (apiErrorHandler) {
           apiErrorHandler(resData, res);
-         }
-        callErr(msg ?? errMessageMap.serviceError);
+        }
+        callErr(msg ?? defaultMessageMap.serviceError);
         return Promise.reject(res.data);
       }
       return data;
@@ -98,17 +97,18 @@ export function createInstance(config: CreateAxiosDefaults = {}) {
       const { response, code, message } = err || {};
       let errMessage = "";
       if (code === "ECONNABORTED" && message.includes("timeout")) {
-        errMessage = errMessageMap.timeout
+        errMessage = defaultMessageMap.timeout;
       }
       if (message?.includes("Network Error")) {
-        errMessage = errMessageMap.networkError
+        errMessage = defaultMessageMap.networkError;
       }
       if (!errMessage) {
         const status = (response?.status || 0) as number;
-        if(Reflect.has(errMessageMap,status)){
-          errMessage = errMessageMap[status as keyof typeof errMessageMap]
-        }else{
-          errMessage = errMessageMap.default
+        if (Reflect.has(defaultMessageMap, status)) {
+          errMessage =
+            defaultMessageMap[status as keyof typeof defaultMessageMap];
+        } else {
+          errMessage = defaultMessageMap.default;
         }
       }
       const { message: Message } = getInsatnceConfig(instance);

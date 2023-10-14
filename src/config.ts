@@ -1,5 +1,5 @@
 import { CreateAxiosDefaults } from "axios";
 
 export const defaultConfig: CreateAxiosDefaults = {
-    timeout: 60000,
-  };
+  timeout: 60000,
+};
