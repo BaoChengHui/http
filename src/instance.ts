@@ -12,8 +12,8 @@ import { defaultMessageMap } from "./message";
 export interface CustomConfig {
   message?: (msg: string) => void;
   alert?: (msg: string) => void;
-  apiResponseAdapter?: (data: unknown) => ApiResponse;
-  apiErrorHandler?: (data: unknown, res: AxiosResponse) => void;
+  apiResponseAdapter?: (data: any) => ApiResponse;
+  apiErrorHandler?: (data: any, res: AxiosResponse) => void;
 }
 
 export interface ApiResponse<T = any> {

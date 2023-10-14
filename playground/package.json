@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "vue": "^3.3.4",
-    "@bch/axios":"workspace:*",
+    "@baochh/http":"workspace:*",
     "qs":"^6.11.2"
   },
   "devDependencies": {

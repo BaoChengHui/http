@@ -79,7 +79,7 @@ importers:
 
   playground:
     dependencies:
-      '@bch/axios':
+      '@baochh/http':
         specifier: workspace:*
         version: link:..
       qs:

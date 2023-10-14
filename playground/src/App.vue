@@ -1,44 +1,25 @@
 <script setup lang="ts">
-import axios from "bch-axios";
+import axios from "@baochh/http";
 const instance=  axios.create({
   message:(msg)=>{
     console.log("err",msg);
   },
-  apiResponseAdapter(data) {
-      return {
-        code:1,
-        data,
-        success:false
-      }
+  alert(msg) {
+      window.alert(msg)
   },
   apiErrorHandler(data, res) {
-      if(data){
+      if(data.code === 401){
         window.alert("11111")
       }
-
   },
-})
-const instance2 =  axios.create({
-  message:(msg)=>{
-    console.log("err1111",msg);
-  },
- 
 })
 
 instance.request({
   method:'get',
-  url:"https://mock.apifox.cn/m1/3367071-0-default/pet/6",
+  url:"http://localhost:3000/pet",
+  messageType:'alert'
 }).then((res)=>{
   console.log("success",res);
-}) .catch(err=>{
-  console.log("err",err);
-})
-
-instance2.request({
-  method:'get',
-  url:"https://mock.apifox.cn/m1/3367071-0-default/pet/6",
-}).then(()=>{
-  console.log("success");
 }) .catch(err=>{
   console.log("err",err);
 })
