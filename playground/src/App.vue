@@ -1,34 +1,69 @@
 <script setup lang="ts">
-import axios from "@baochh/http";
-const instance=  axios.create({
-  message:(msg)=>{
-    console.log("err",msg);
-  },
-  alert(msg) {
-      window.alert(msg)
-  },
+import http,{setErrMessageMap} from "@baochat/http";
+import { ElMessage, ElMessageBox } from "element-plus";
+
+
+setErrMessageMap({
+  
+})
+
+interface ApiRes<T = any> {
+  data: T;
+  code: number;
+  isSuccess: boolean;
+  message?: string;
+}
+// type aaa = Record<string,string>
+
+const instance = http.create({
+  baseURL: "/api",
   apiErrorHandler(data, res) {
       if(data.code === 401){
-        window.alert("11111")
+        //todo
       }
   },
-})
+});
 
-instance.request({
-  method:'get',
-  url:"http://localhost:3000/pet",
-  messageType:'alert'
-}).then((res)=>{
-  console.log("success",res);
-}) .catch(err=>{
-  console.log("err",err);
-})
+export function getPet(
+  id: number
+): Promise<{ name: string; category: string }> {
+  return instance.request({
+    url: "/pet",
+    method: "get",
+    params: {
+      id,
+    },
+  });
+}
 
+// getPet(1).then(red=>)
+
+// const instance=  http.create({
+//   // message:(msg)=>{
+//   //   console.log("err",msg);
+//   // },
+//   // alert(msg) {
+//   //     window.alert(msg)
+//   // },
+//   // apiErrorHandler(data, res) {
+//   //     if(data.code === 401){
+//   //       window.alert("11111")
+//   //     }
+//   // },
+// })
+
+// instance.request({
+//   method:'get',
+//   url:"http://localhost:3000/pet",
+//   messageType:'alert'
+// }).then((res)=>{
+//   console.log("success",res);
+// }) .catch(err=>{
+//   console.log("err",err);
+// })
 </script>
 
-<template>
-  
-</template>
+<template></template>
 
 <style scoped>
 header {

@@ -21,6 +21,7 @@ export interface ApiResponse<T = any> {
   code: number;
   success: boolean;
   msg?: string;
+  [p: string]: any;
 }
 
 let instanceMap: Record<number, CustomConfig> = {};

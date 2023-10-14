@@ -1,5 +1,5 @@
 {
-  "name": "@baochh/http",
+  "name": "@baochat/http",
   "version": "0.1.2",
   "description": "axios二次封装",
   "main": "dist/index.js",
@@ -9,14 +9,11 @@
     "axios",
     "http"
   ],
-  "author": "baochh",
+  "repository": {
+    "url": "https://github.com/Baochat/http"
+  },
+  "author": "Baochat",
   "license": "MIT",
-  "dependencies": {
-    "file-saver": "^2.0.5"
-  },
-  "peerDependencies": {
-    "axios": "^1.5.1"
-  },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },
@@ -36,5 +33,11 @@
     "@types/file-saver": "^2.0.5",
     "typescript": "^5.2.2",
     "bumpp": "^9.2.0"
+  },
+  "dependencies": {
+    "file-saver": "^2.0.5"
+  },
+  "peerDependencies": {
+    "axios": "^1.5.1"
   }
 }
