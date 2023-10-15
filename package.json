@@ -1,6 +1,6 @@
 {
   "name": "@baochat/http",
-  "version": "0.1.2",
+  "version": "0.1.0",
   "description": "axios二次封装",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -21,7 +21,7 @@
     "build": "tsup src/index.ts --format cjs,esm --dts  --clean",
     "dev": "tsup src/index.ts --format cjs,esm --dts  --clean --watch",
     "prepublishOnly": "npm run  build",
-    "release": "bumpp && pnpm publish"
+    "release": "bumpp && pnpm publish --access public"
   },
   "files": [
     "dist",
