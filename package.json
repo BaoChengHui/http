@@ -1,6 +1,6 @@
 {
   "name": "@baochat/http",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "axios二次封装",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
