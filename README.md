@@ -1,6 +1,6 @@
 # @baochat/http
 
-axios 封装，默认配置了 axios 的响应拦截器，处理后端返回接口的格式为`ApiResponse`，增加 download 方法，调用请求方法返回的数据为`ApiResponse['data']`,配置请求拦截器均，请求等 api 均与 axios 一致。
+axios 封装，默认配置了 axios 的响应拦截器，处理后端返回接口的格式为`ApiResponse`，其他格式可通过方法进行适配，增加 download 方法，调用请求方法返回的数据为`ApiResponse['data']`，配置请求拦截器均，请求等 api 均与 axios 一致。
 
 ```ts
 export interface ApiResponse<T = any> {
@@ -10,27 +10,6 @@ export interface ApiResponse<T = any> {
   msg?: string;
   [p: string]: any;
 }
-```
-
-## 默认 http 错误消息
-
-```ts
-export const defaultMessageMap = {
-  timeout: "请求超时，请重试",
-  networkError: "网络异常，请检查您的网络连接是否正常",
-  serviceError: "服务器错误，请稍候重试！",
-  default: "未知错误",
-  400: "参数错误！",
-  401: "您没有权限！",
-  403: "您没有权限！",
-  404: "网络请求错误，未找到该资源",
-  405: "网络请求错误，不允许该请求方式",
-  500: "服务器错误，请稍候重试！",
-  501: "服务器错误，请稍候重试！",
-  502: "服务器错误，请稍候重试！",
-  503: "服务器错误，请稍候重试！",
-  504: "网络超时",
-};
 ```
 
 ## 安装
@@ -120,6 +99,27 @@ const instance = http.create({
     }
   },
 });
+```
+
+## 默认 http 错误消息
+
+```ts
+export const defaultMessageMap = {
+  timeout: "请求超时，请重试",
+  networkError: "网络异常，请检查您的网络连接是否正常",
+  serviceError: "服务器错误，请稍候重试！",
+  default: "未知错误",
+  400: "参数错误！",
+  401: "您没有权限！",
+  403: "您没有权限！",
+  404: "网络请求错误，未找到该资源",
+  405: "网络请求错误，不允许该请求方式",
+  500: "服务器错误，请稍候重试！",
+  501: "服务器错误，请稍候重试！",
+  502: "服务器错误，请稍候重试！",
+  503: "服务器错误，请稍候重试！",
+  504: "网络超时",
+};
 ```
 
 ## 自定义 http 错误的消息内容
